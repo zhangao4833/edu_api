@@ -6,7 +6,7 @@ from mainapp.views import user_v
 from flask_script import Manager
 from models.user import db
 from utils import cache
-
+from flask_bootstrap import Bootstrap
 
 @app.before_request
 def check_login():
@@ -40,5 +40,6 @@ def drop_database():
 if __name__ == '__main__':
     app.register_blueprint(user_v.blue, url_prefix='/user')
     db.init_app(app)
+    Bootstrap().init_app(app)
     manage = Manager(app)
     manage.run()

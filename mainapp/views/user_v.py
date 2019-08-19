@@ -17,7 +17,10 @@ def login():
     if request.method == 'POST':
         phone = request.form.get('phone')
         password = request.form.get('password')
-        login_user = User.query.filter(User.phone == phone, User.auth_key == pwd(password)).one()
+        try:
+            login_user = User.query.filter(User.phone == phone, User.auth_key == pwd(password)).one()
+        except:
+            login_user = None
         if login_user:
             # 登陆成功
             # 生成token
@@ -31,6 +34,7 @@ def login():
             # 登陆失败
             massege = '查无此用户'
     return render_template('user/login.html', msg=massege)
+
 
 @blue.route('/logout/')
 def logout():

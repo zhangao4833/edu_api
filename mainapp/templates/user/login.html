@@ -1,40 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>登陆</title>
-</head>
-<body>
-<h1>用户登陆界面</h1>
-<h3>{{ base_url }}</h3>
-<form action="/user/login/" method="post" enctype="application/x-www-form-urlencoded">
-    <input type="text" name="phone" placeholder="手机号">
-    <input type="password" name="password" placeholder="密码">
-    <br>
-    <button>登陆</button>
-    <a href="#">没有账号则先去注册</a>
-</form>
-<div id="val_info" style="color: red"></div>
-<script type="text/javascript">
-    function $(id){
-        return document.getElementById(id)
-    }
+{% extends 'bootstrap/base.html' %}
 
-    //  设置表单提交函数
+{% block title %}
+    登陆
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 text-center">
+                <h3 class="">用户登陆界面</h3>
+                <form action="/user/login/" method="post" enctype="application/x-www-form-urlencoded">
+                    <label class="form-group ">
+                        <input class="form-control" type="text" name="phone" placeholder="手机号">
+                    </label><br>
+                    <label class="form-group">
+                        <input class="form-control" type="password" name="password" placeholder="密码">
+                    </label>
+                    <br>
+                    <button class="btn btn-default">登陆</button>
+                    <a href="#">没有账号则先去注册</a>
+                </form>
+                <div id="val_info" style="color: red">
+                    {% if msg %}
+                        {{ msg }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
 
-    document.forms[0].onsubmit = function (ev) {
-        console.log(this);
-        if (!/\d{11}/.test(this.phone.value)){
-            $('val_info').innerHTML = '手机号必须是11位';
-            return false;
-        }
-        if (!/\w{6,}/.test(this.password.value)){
-            $('val_info').innerHTML = '口令是包含数字和字母的至少6位长度';
-            return false;
-        }
-        $('val_info').innerHTML = '';
-        return true;
-    }
-</script>
-</body>
-</html>
+    {% block scripts %}
+        {{ super() }}
+        <script type="text/javascript">
+            function $(id) {
+                return document.getElementById(id)
+            }
+
+            //  设置表单提交函数
+
+            document.forms[0].onsubmit = function (ev) {
+                console.log(this);
+                if (!/\d{11}/.test(this.phone.value)) {
+                    $('val_info').innerHTML = '手机号必须是11位';
+                    return false;
+                } else {
+                    if (!/\w{6,}/.test(this.password.value)) {
+                        $('val_info').innerHTML = '口令是包含数字和字母的至少6位长度';
+                        return false;
+                    } else {
+                        $('val_info').innerHTML = '';
+                    }
+                }
+
+                return true;
+            }
+        </script>
+    {% endblock %}
+
+{% endblock %}
