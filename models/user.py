@@ -12,3 +12,27 @@ class User(db.Model):
     nick_name = Column(String(20))
     photo = Column(String(100))
 
+
+class BaseModel(db.Model):
+    __abstract__ = True  # 作用：不会创建作为普通模型的对应表
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(20), nullable=False, unique=True)
+
+
+class Role(BaseModel):
+    __tablename__ = 'role'
+    pass
+
+
+class Privilege(BaseModel):
+    __tablename__ = 'privilege'
+    pass
+
+
+# 模型之间的关系不需要创建第三个模型来实现第三张关系表创建
+# 创建用户和角色的关系表
+user_role = db.Table('user_role', Column('user_id', Integer, db.ForeignKey('user.id')),
+                     Column('role_id', Integer, db.ForeignKey('role.id')))
+
+role_privilege = db.Table('role_privilege', Column('role_id', Integer, db.ForeignKey('role.id')),
+                          Column('privilege_id', Integer, db.ForeignKey('privilege.id')))
