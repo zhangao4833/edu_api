@@ -24,7 +24,9 @@ def user_role():
     # db.session.add_all(
     #     (user_role(user_id=1, role_id=1), user_role(user_id=2, role_id=1), user_role(user_id=2, role_id=2)))
     u = User.query.get(1)
-
+    u.roles.append(Role.query.get(1))
+    u.roles.append(Role.query.get(2))
+    db.session.commit()
 
 if __name__ == '__main__':
     app.app_context().push()
