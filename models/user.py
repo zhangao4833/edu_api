@@ -25,7 +25,7 @@ class Privilege(BaseModel):
 
 class Role(BaseModel):
     __tablename__ = 'role'
-    privileges = db.relationship(Privilege, secondary=role_privilege, backref='privilege')
+    privileges = db.relationship(Privilege, secondary=role_privilege, backref='privileges')
 
 
 class User(db.Model):
