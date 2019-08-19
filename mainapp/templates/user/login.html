@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+</head>
+<body>
+<h1>用户登陆界面</h1>
+<h3>{{ base_url }}</h3>
+<ul>
+    {% for cookie, value in cookies.items() %}
+        <li>{{ cookie }}: {{ value }}</li>
+    {% endfor %}
+
+</ul>
+</body>
+</html>
