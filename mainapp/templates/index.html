@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>主页</title>
-</head>
-<body>
-<h1>主页</h1>
-{{ msg }}
-<a href="/user/logout/">注销</a>
-</body>
-</html>
+{% extends 'bootstrap/base.html' %}
+{% block title %}
+    主页
+{% endblock %}
+{% block content %}
+
+    <h1>主页</h1>
+    {{ msg }}
+    <h3><a href="{{ url_for('userBlue.modify') }}">修改个人信息</a></h3>
+    <a href="/user/logout/">注销</a>
+{% endblock %}
