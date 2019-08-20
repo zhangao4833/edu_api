@@ -5,7 +5,50 @@
 {% block content %}
 
     <h1>主页</h1>
+    <p><img id="imge" src="/static/{% if user.photo %}{{ user.photo }}{% else %}images/default.jpg{% endif %}" alt="图片"
+            width="200px" height="200px" title="点击头像进行修改" onclick="selectImg()"
+            style="border-radius: 50%; box-shadow: 5px 5px 5px lightgray"></p>
+    <input type="file" id="seletFile" style="display: none" onchange="upload(this.files[0])">
     {{ msg }}
     <h3><a href="{{ url_for('userBlue.modify') }}">修改个人信息</a></h3>
     <a href="/user/logout/">注销</a>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript">
+        function selectImg() {
+            if (confirm('确定要修改图片')) {
+                document.getElementById('seletFile').click()
+            }
+        }
+
+        function upload(file) {
+            if (file.type.startsWith('image/')) {
+                if (file.size <= 2 * 1024 * 1024) {
+                    let url = "{{ url_for('userBlue.upload_photo') }}";
+                    let req = new XMLHttpRequest();
+                    req.open('post', url, true);
+                    req.onload = function (ev) {
+                        if (req.status === 200 && req.readyState === 4) {
+                            respText = req.responseText;
+                            respJson = JSON.parse(respText);
+                            console.log(respJson);
+                            document.getElementById('imge').src = respJson.path
+                        }
+
+                    };
+                    let formdata = new FormData();
+                    formdata.append('photo', file);
+                    req.send(formdata)
+
+                } else {
+                    alert('图片太大了，必须小于2M')
+                }
+            } else {
+                alert('上传的文件类型必须是图片')
+            }
+        }
+
+
+    </script>
 {% endblock %}

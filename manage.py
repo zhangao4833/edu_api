@@ -7,7 +7,7 @@ from flask_script import Manager
 from models.user import db, User
 from utils import cache
 from flask_bootstrap import Bootstrap
-
+from flask_cors import CORS
 
 @app.before_request
 def check_login():
@@ -27,7 +27,7 @@ def index():
     # 获取用户登陆信息
     token = request.cookies.get('token')
     user = User.query.get(int(cache.get_user_id(token)))
-    return render_template('index.html')
+    return render_template('index.html', user=user)
 
 
 @app.route('/create_db/')
@@ -53,6 +53,7 @@ def drop_database():
 if __name__ == '__main__':
     app.register_blueprint(user_v.blue, url_prefix='/user')
     db.init_app(app)
+    CORS().init_app(app)
     Bootstrap().init_app(app)
     manage = Manager(app)
     manage.run()

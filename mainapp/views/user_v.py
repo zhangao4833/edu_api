@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import time
 import uuid
 
 from flask import Blueprint, jsonify
@@ -46,11 +47,24 @@ def modify():
     return render_template('user/info.html', user=user, msg=msg)
 
 
-@blue.route('/upload/', methods=['POST'])
-def upload():
+@blue.route('/upload', methods=['POST'])
+def upload_photo():
+    token = request.cookies.get('token')
+    user = User.query.get(int(cache.get_user_id(token)))
+    upload_file:FileStorage = request.files.get('photo')
+    filename = uuid.uuid4().hex + os.path.splitext(upload_file.filename)[-1]
+    filepath = os.path.join(settings.USER_DIR, filename)
+    upload_file.save(filepath)
+    # 任务2 删除用户的旧图片资源
+    try:
+        os.remove(os.path.join(settings.STATIC_DIR, user.photo))
+    except:
+        print('文件丢失')
+    user.photo = 'user/' + filename
+    db.session.commit()
     return jsonify({
         'msg': '上传成功',
-        'path': 'user/ms1.jpg'
+        'path': '/static/user/' + filename
     })
 
 
